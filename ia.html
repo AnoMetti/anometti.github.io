@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>|Wirdey A'N 0.2 IA|</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #000000, #000000);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .chat-container {
+      width: 900px;
+      height: 600px;
+      background-color: #000000;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgb(255, 0, 0);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #000000;
+      padding: 20px;
+      text-align: center;
+      color: #ff0000;
+      font-weight: bold;
+      font-size: 1.4em;
+      letter-spacing: 1px;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 60%;
+      padding: 14px 20px;
+      border-radius: 20px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      font-size: 1.05em;
+    }
+
+    .user-msg {
+      align-self: flex-end;
+      background: #ffffff;
+      color: rgb(0, 0, 0);
+    }
+
+    .bot-msg {
+      align-self: flex-start;
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .bot-loading {
+      font-style: italic;
+      opacity: 0.6;
+      animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #000000;
+      background: #1fff02;
+    }
+
+    input {
+      flex: 1;
+      padding: 20px;
+      background: #000000;
+      color: rgb(255, 255, 255);
+      border: none;
+      outline: none;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 20px 30px;
+      background: #00ff26;
+      color: rgb(0, 0, 0);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background: #000000;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">(Wirdey A'N 0.2 - IA : No API on my AI)</div>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Tape ton message ici..." onkeydown="handleKey(event)">
+      
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+
+    function handleKey(e) {
+      if (e.key === "Enter") sendMessage();
+    }
+
+    function sendMessage() {
+      const msg = userInput.value.trim();
+      if (!msg) return;
+
+      appendMessage("user", msg);
+      userInput.value = "";
+
+      const loading = document.createElement("div");
+      loading.className = "bot-msg bot-loading";
+      loading.textContent = "Wirdey écrit...";
+      chatBox.appendChild(loading);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        loading.remove();
+        const response = getBotResponse(msg);
+        appendMessage("bot", response);
+      }, 1000);
+    }
+
+    function appendMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.className = `msg ${sender}-msg`;
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+      const txt = input.toLowerCase();
+
+      // Présentation IA
+      if (txt.includes("/présentation-ia")) return "Je m'appelle Wirdey IA 😁. Une IA féminine 🤖 !";
+
+      // Commandes HTML
+      if (txt.includes("/html")) return "La balise <html> sert à Structurer la racine du document HTML .";
+      if (txt.includes("/head")) return "La balise <head> Contient le titre, les liens CSS et finalements les métadonnées .";
+      if (txt.includes("/body")) return "La balise <body> montre le contenu visible sur la page .";
+      if (txt.includes("/div")) return "La balise <div> contient le générique .";
+      if (txt.includes("/span")) return "La balise <span> c'est un conteneur de ligne .";
+      if (txt.includes("/h1-h6")) return "Les balises <h1> à <h6> servent pour faire des titres sur un Site Web par exemple .";
+      if (txt.includes("/p")) return "La balise <p> sert pour créer des paragraphes .";
+      if (txt.includes("/href")) return "La balise <a href= >, C'est pour créer des liens cliquable. Ex : Un site web. Dans cette commande <a href= >, entre = et >, il faut installer le lien entre ces symboles .";
+      if (txt.includes("/image")) return "La balise <img src= >, sert à mettre des images. Ex : un site web, entre = et >, il faut installer le lien entre ces symboles .";
+      if (txt.includes("/ul-ol-li")) return "Permet de lister de façon non ordonnées et ordonnées .";
+      if (txt.includes("/form")) return "Permet de faire des formulaires .";
+      if (txt.includes("/input")) return "Cette commande sert à faire, un champ de saisie .";
+      if (txt.includes("/button")) return "Pour faire des boutons, Ex : Dans un site web .";
+      if (txt.includes("/script")) return "Permet d'ajouter du JavaScript .";
+      if (txt.includes("/link")) return "Pour lier du CSS .";
+      if (txt.includes("/meta")) return "Infos meta (charset, viewport...) .";
+
+      // Commandes CSS
+      if (txt.includes("/color")) return "Intégrer de la couleur dans du texte .";
+      if (txt.includes("/background")) return "Pour changer la couleur en fond .";
+      if (txt.includes("/font-size")) return "Permet de régler la taille, de vos caractères de vos textes .";
+      if (txt.includes("/margin")) return "L'espace extérieur de l'élément .";
+      if (txt.includes("/padding")) return "L'espace intérieur de l'élément .";
+      if (txt.includes("/border")) return "La bordure de l'élément .";
+      if (txt.includes("/display")) return "Pour block, inline, flex, grid, etc...";
+      if (txt.includes("position")) return "Pour static, relative, absolute, fixed";
+      if (txt.includes("/top-left-right-bottom")) return "Ce sont des positionnements .";
+      if (txt.includes("/z-index")) return "Pour faire des superpositions .";
+      if (txt.includes("/text-align")) return "Pour faire des alignements à l'horizontal .";
+      if (txt.includes("/align-items-justify-content")) return "ces deux commandes servent, pour centrer en flexbox .";
+      if (txt.includes("/transition")) return "Permet de faire des animations douces .";
+      if (txt.includes("/animation")) return "Permet de faire des animations complexes .";
+
+      // Commandes JavaScript
+      if (txt.includes("/document.getElementById()")) return "Permet de sélectionner un élément HTML par ID .";
+      if (txt.includes("/document.querySelector()")) return "Permet de sélectionner un élément (classe, tag, etc.) .";
+      if (txt.includes("/addEventListener()")) return "Permet d'ajouter un évènement, Ex : Un clic .";
+      
+      // Définition API
+      if (txt.includes("/api")) return "Une API (Application Programming Interface) est une interface qui permet à deux logiciels de communiquer entre eux. Elle agit comme un pont entre ton application et un service externe (ex. : météo, chatbot, paiement, etc.). Elle te donne accès à des fonctionnalités sans avoir à tout coder toi-même. Mais utiliser une API pour son IA peut vite coûter de l’argent. Du coup, si tu veux éviter d’avoir à payer, le mieux c’est de créer ta propre IA sans passer par une API !";
+      
+      // informations CSS
+      if (txt.includes("/info-css")) return "Le CSS favorise l'accessibilité d'une page web, donnant le contrôle du rendu d'un document dans le navigateur : il est possible d'adapter des contraintes ou à des préférences concernant par exemple la taille d'affichage des caractères ou les couleurs. (Source : Wikipédia)";
+      
+      return "Apprends moi encore... !";
+
+    }
+  </script>
+  
+  <script src="script.js"></script>
+</body>
+</html>
